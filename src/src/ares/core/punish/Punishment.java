@@ -1,10 +1,12 @@
 package src.ares.core.punish;
 
+import src.ares.core.chat.Notification;
 import src.ares.core.client.Client;
 import src.ares.core.client.OfflineClient;
 
 public abstract class Punishment
 {
+	private Notification notification = new Notification();
 	private OfflineClient offender;
 	private Client punisher;
 	private String name;
@@ -30,6 +32,11 @@ public abstract class Punishment
 	 * This method should be called when the a new punishment needs to be applied.
 	 */
 	public abstract void apply();
+
+	public Notification getNotifications()
+	{
+		return notification;
+	}
 
 	public String getName()
 	{

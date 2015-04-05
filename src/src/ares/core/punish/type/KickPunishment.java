@@ -41,6 +41,5 @@ public class KickPunishment extends Punishment
 					manager.sendToPlayers(true, ChatColor.RED + "" + ChatColor.BOLD + getName(), Chat.player(getOffender().getName()) + " was kicked by " + Chat.player(getPunisher().getName()) + " because of " + Chat.tool(getReason()));
 			}
 		}, 10);
-
 	}
 }

@@ -53,5 +53,6 @@ public class BanPunishment extends TimedPunishment
 		}
 
 		getOffender().getManager().addBanHistory(getPunisher().getName(), getOffender().getName(), Double.toString(getDuration()) + " minutes", getReason());
+		getNotifications().sendToStaff(false, ChatColor.GRAY + getPunisher().getName() + " issued a " + getName() + " on " + getOffender().getName() + " for " + getFormattedDuration() + ".");
 	}
 }

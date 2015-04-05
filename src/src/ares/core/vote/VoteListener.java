@@ -38,25 +38,25 @@ public class VoteListener extends Module
 		int amount = reward.goldReward(100, 500);
 
 		Main.log("Received vote from " + vote.getUsername() + " and reward of " + amount + " Gold", Level.INFO);
-		
+
 		if (amount <= 200)
 		{
 			rarity = ChatColor.GREEN + "Common";
-			
+
 			if (online != null)
 				online.playSound(Sound.HORSE_ARMOR, 1.0F, 1.3F);
 		}
 		else if (amount <= 400 && amount > 200)
 		{
 			rarity = ChatColor.RED + "Fortune";
-		
+
 			if (online != null)
 				online.playSound(Sound.NOTE_PLING, 1.0F, 1.5F);
 		}
 		else if (amount > 400)
 		{
 			rarity = ChatColor.LIGHT_PURPLE + "Jackpot";
-			
+
 			if (online != null)
 				online.playSound(Sound.LEVEL_UP, 1.0F, 1.5F);
 		}

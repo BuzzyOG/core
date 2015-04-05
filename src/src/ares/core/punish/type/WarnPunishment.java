@@ -31,5 +31,6 @@ public class WarnPunishment extends Punishment
 		}
 
 		getOffender().getManager().addWarnHistory(getPunisher().getName(), getOffender().getName(), getReason());
+		getNotifications().sendToStaff(false, ChatColor.GRAY + getPunisher().getName() + " issued a " + getName() + " on " + getOffender().getName() + " for " + getReason() + ".");
 	}
 }

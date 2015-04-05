@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -44,12 +45,12 @@ public abstract class Menu extends Module
 	public Menu(Material menuDisplay, String menuName, int menuSlots)
 	{
 		super("Menu");
-		display = new CraftedItemStack(menuDisplay, menuName).build();
+		this.display = new CraftedItemStack(menuDisplay, menuName).build();
 
-		material = menuDisplay;
-		name = menuName;
-		slots = menuSlots;
-		inventory = Bukkit.createInventory(null, slots, name);
+		this.material = menuDisplay;
+		this.name = menuName;
+		this.slots = menuSlots;
+		this.inventory = Bukkit.createInventory(null, slots, name);
 
 		Main.debug("Creating " + menuName + " with " + menuSlots + " slots.");
 	}
@@ -111,7 +112,7 @@ public abstract class Menu extends Module
 	 */
 	private void BuildPage(Player player)
 	{
-		inventory = Bukkit.createInventory(player, slots, name);
+		inventory = Bukkit.createInventory(null, slots, name);
 
 		InventoryConstruct(player);
 
@@ -157,7 +158,6 @@ public abstract class Menu extends Module
 			return;
 
 		event.setCancelled(true);
-		Main.debug("PlayerInteractEvent: " + player.getName() + " on " + name + ".");
 
 		player.closeInventory();
 		ShowPage(player);
@@ -187,12 +187,32 @@ public abstract class Menu extends Module
 			return;
 
 		event.setCancelled(true);
-		Main.debug("InventoryClickEvent: " + player.getName() + " on " + name + ".");
 
 		if (forceClose)
 			player.closeInventory();
 
 		InventoryClick(action, item, player);
+
+		if (dependOnEvents)
+			Destroy();
+	}
+
+	@EventHandler
+	public void EventCloseInventory(InventoryCloseEvent event)
+	{
+		Player player = (Player) event.getPlayer();
+		Inventory inventory = event.getInventory();
+
+		if (inventory.getName() != this.name)
+			return;
+		if (!inventory.equals(this.inventory))
+			return;
+		if (!player.getOpenInventory().getTopInventory().equals(this.inventory))
+			return;
+		if (inventory.getViewers().size() > 1)
+			return;
+		if (!inventory.getViewers().get(0).equals(player))
+			return;
 
 		if (dependOnEvents)
 			Destroy();
@@ -210,13 +230,22 @@ public abstract class Menu extends Module
 
 	protected void Destroy()
 	{
-		Main.debug("Destroying " + name + ".");
-
+		Main.debug("Destroying");
 		unregisterEvents();
+		displays.clear();
 		display = null;
 		material = null;
 		name = null;
 		inventory = null;
+
+		try
+		{
+			finalize();
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public ItemStack getDisplay()
@@ -263,6 +292,4 @@ public abstract class Menu extends Module
 	{
 		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1.0F, 1.5F);
 	}
-
-	// That's all folks!
 }

@@ -13,7 +13,7 @@ import src.ares.core.currency.ICurrency;
 
 public abstract class PurchaseMenu extends Menu
 {
-	private ItemStack item;
+	private final ItemStack item;
 	private ICurrency currency;
 
 	private Material cancelBlock = Material.REDSTONE_BLOCK;
@@ -68,7 +68,7 @@ public abstract class PurchaseMenu extends Menu
 		if (item.getType() == purchaseBlock)
 		{
 			// Purchase success
-
+			
 			if (PrePaymentChecks(client))
 			{
 				if (client.removeCurrency(currency, true))

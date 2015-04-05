@@ -27,6 +27,25 @@ public abstract class TimedPunishment extends Punishment
 		this.duration = duration;
 	}
 
+	public String getFormattedDuration()
+	{
+		if (duration > 0)
+		{
+			if (duration == 1)
+			{
+				return duration + " minute";
+			}
+			else
+			{
+				return duration + " minutes";
+			}
+		}
+		else
+		{
+			return "permanent";
+		}
+	}
+
 	public double getDuration()
 	{
 		return duration;
